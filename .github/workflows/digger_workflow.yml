@@ -33,63 +33,58 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Extract Project Directory
-        id: extract-project-dir
-        run: |
-          ls -la
+#       - name: Extract Project Directory
+#         id: extract-project-dir
+#         run: |
+#           if [ -z '${{ github.event.inputs.spec }}' ]; then
+#             echo "Error: No spec file provided."
+#             exit 1
+#           fi
+#           PROJECT_DIR=$(echo '${{ github.event.inputs.spec }}' | grep -oP '(?<="projectDir":")[^"]+')
+#           if [ -z "$PROJECT_DIR" ]; then
+#             echo "Error: Unable to determine project directory"
+#             exit 1
+#           fi
+#           echo "project_dir=${PROJECT_DIR}" >> $GITHUB_ENV
 
-      # - name: Extract Project Directory
-      #   id: extract-project-dir
-      #   run: |
-      #     if [ -z '${{ github.event.inputs.spec }}' ]; then
-      #       echo "Error: No spec file provided."
-      #       exit 1
-      #     fi
-      #     PROJECT_DIR=$(echo '${{ github.event.inputs.spec }}' | grep -oP '(?<="projectDir":")[^"]+')
-      #     if [ -z "$PROJECT_DIR" ]; then
-      #       echo "Error: Unable to determine project directory"
-      #       exit 1
-      #     fi
-      #     echo "project_dir=${PROJECT_DIR}" >> $GITHUB_ENV
-
-      # - name: Extract Root Directory
-      #   id: extract-root-dir
-      #   run: |
-      #     ROOT_DIR=$(echo '${{ env.project_dir }}' | awk -F'/' '{print $1"/"$2}')
-      #     if [ -z "$ROOT_DIR" ]; then
-      #       echo "Error: Unable to determine root directory"
-      #       exit 1
-      #     fi
-      #     echo "root_dir=${ROOT_DIR}" >> $GITHUB_ENV
+#       - name: Extract Root Directory
+#         id: extract-root-dir
+#         run: |
+#           ROOT_DIR=$(echo '${{ env.project_dir }}' | awk -F'/' '{print $1"/"$2}')
+#           if [ -z "$ROOT_DIR" ]; then
+#             echo "Error: Unable to determine root directory"
+#             exit 1
+#           fi
+#           echo "root_dir=${ROOT_DIR}" >> $GITHUB_ENV
 
 
-      # - name: Parse Account ID from account.hcl
-      #   id: parse-account
-      #   run: |
-      #     ACCOUNT_ID=$(grep -oP '(?<=account_id = ")[^"]+' ${{ env.root_dir }}/account.hcl)
-      #     if [ -z "$ACCOUNT_ID" ]; then
-      #       echo "Error: Unable to extract account ID"
-      #       exit 1
-      #     fi
-      #     echo "account_id=${ACCOUNT_ID}" >> $GITHUB_ENV
+#       - name: Parse Account ID from account.hcl
+#         id: parse-account
+#         run: |
+#           ACCOUNT_ID=$(grep -oP '(?<=account_id = ")[^"]+' ${{ env.root_dir }}/account.hcl)
+#           if [ -z "$ACCOUNT_ID" ]; then
+#             echo "Error: Unable to extract account ID"
+#             exit 1
+#           fi
+#           echo "account_id=${ACCOUNT_ID}" >> $GITHUB_ENV
+# ${{ env.account_id }}
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.9.8
 
-      # - name: Install Terraform
-      #   uses: hashicorp/setup-terraform@v2
-      #   with:
-      #     terraform_version: 1.9.8
-
-      # - name: Digger Run
-      #   uses: diggerhq/digger@vLatest
-      #   with:
-      #     digger-spec: ${{ inputs.spec }}
-      #     setup-aws: true
-      #     aws-role-to-assume: arn:aws:iam::${{ env.account_id }}:role/digger
-      #     aws-region: us-east-1
-      #     setup-terragrunt: true
-      #     terragrunt-version: 0.44.1
-      #     upload-plan-destination: 'aws'
-      #     upload-plan-destination-s3-bucket: 'my-terraform-state-ntdocsss'
-      #   env:
-      #     GITHUB_CONTEXT: ${{ toJson(github) }}
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Digger Run
+        uses: diggerhq/digger@vLatest
+        with:
+          digger-spec: ${{ inputs.spec }}
+          setup-aws: true
+          aws-role-to-assume: arn:aws:iam::160319277176:role/digger
+          aws-region: us-east-1
+          setup-terragrunt: true
+          terragrunt-version: 0.44.1
+          upload-plan-destination: 'aws'
+          upload-plan-destination-s3-bucket: 'my-terraform-state-ntdocsss'
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
