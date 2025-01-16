@@ -23,5 +23,4 @@ inputs = {
     Environment = "production"
     team = "devopss"
   } 
-
 }
