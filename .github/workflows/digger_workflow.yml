@@ -10,6 +10,14 @@ on:
         description: "Optional run name"
         required: false
 
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
 run-name: '${{ inputs.run_name }}'
 
 jobs:
