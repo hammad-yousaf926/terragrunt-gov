@@ -36,10 +36,10 @@ jobs:
       - name: Extract Project Directory
         id: extract-project-dir
         run: |
-          if [ -z '${{ github.event.inputs.spec }}' ]; then
-            echo "Error: No spec file provided."
-            exit 1
-          fi
+          # if [ -z '${{ github.event.inputs.spec }}' ]; then
+          #   echo "Error: No spec file provided."
+          #   exit 1
+          # fi
           PROJECT_DIR=$(echo '${{ github.event.inputs.spec }}' | grep -oP '(?<="projectDir":")[^"]+')
           if [ -z "$PROJECT_DIR" ]; then
             echo "Error: Unable to determine project directory"
