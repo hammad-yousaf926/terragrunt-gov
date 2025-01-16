@@ -68,6 +68,7 @@ jobs:
 #           fi
 #           echo "account_id=${ACCOUNT_ID}" >> $GITHUB_ENV
 #           ${{ env.account_id }}
+
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
         with:
